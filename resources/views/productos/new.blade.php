@@ -8,7 +8,7 @@
     </div>
     <div class="row">
 
-        <form  method="POST" action="{{ route('productos.store') }}">
+        <form  method="POST" action="{{ url('productos') }}">
             @csrf
             <div class="row">
                 <div class="input-field col s8">
