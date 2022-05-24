@@ -7,9 +7,11 @@ use App\Models\producto;
 use App\Models\Categoria;
 use App\Models\Marca;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class productoController extends Controller
 {
+    //1 definir reglas de validacion 
     /**
      * Display a listing of the resource.
      *
@@ -41,8 +43,39 @@ class productoController extends Controller
      */
     public function store(Request $r)
     {
-        //crear la entidad producto 
-        $p = new producto;
+
+        $reglas=[
+            "nombre" => 'required|alpha',
+            "desc" => 'required|min:10|max:50',
+            "precio" => 'required|numeric',
+            "marca" => 'required',
+            "categoria" => "required"
+    
+        ];
+        //mensajes personalizados por regla 
+        $mensajes =[
+            "required" => "campo obligatorio",
+            "min" => "porfavor escribe minimo de 10 palabras",
+            "max" => "porfavor escribe maximo de 50 palabras",
+            "numeric" => "solo numeros",
+            "alpha" => "solo letras "
+
+        ];
+        // crear el objeto validador
+        $v = validator::make($r->all(), $reglas, $mensajes);
+        //validar datos
+        //metodo falls(); retorna un true en caso de validacion faliida y false en caso de la validacion sea correcta
+        if($v->fails()){
+            //validacion falla 
+            //mostrar mensajes de  validacion
+            //redireccionar mi formulario de nuevo producto
+            return redirect('productos/create')
+                ->withErrors($v)
+                ->withInput();
+
+        }else{
+            //validacion correcta
+            $p = new producto;
         //asignar valores a los atributos 
         //del nuevo producto 
         $p->nombre = $r->nombre;
@@ -52,8 +85,28 @@ class productoController extends Controller
         $p->categoria_id = $r->categoria;
         //grabar la base de datos
         $p->save();
-        echo"producto creado";
-    
+        //redireccionar la ruta : create
+        //levando datos de la secion 
+        return redirect('productos/create')
+                ->with('mensaje' , 'producto creado');
+
+        }
+        //crear la entidad producto 
+       /* $p = new producto;
+        //asignar valores a los atributos 
+        //del nuevo producto 
+        $p->nombre = $r->nombre;
+        $p->desc = $r->desc;
+        $p->precio = $r->precio;
+        $p->marca_id = $r->marca;
+        $p->categoria_id = $r->categoria;
+        //grabar la base de datos
+        $p->save();
+        //redireccionar la ruta : create
+        //levando datos de la secion 
+        return redirect('productos/create')
+                ->with('mensaje' , 'producto creado');
+    */
     }
 
     /**
