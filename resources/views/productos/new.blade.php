@@ -8,7 +8,7 @@
     </div>
     <div class="row">
 
-        <form  method="POST" action="{{ url('productos') }}">
+        <form  method="POST" action="{{ url('productos') }}" enctype="multipart/form-data">
             @csrf
             <div class="row">
                 <div class="input-field col s8">
@@ -63,7 +63,9 @@
                     </div>
                     <div class="file-path-wrapper ">
                         <input type="text" class="file-path validata">
+                        <span class=" blue darken-4-text">{{ $errors->first('imagen') }} </span>
                     </div>
+ 
                 </div>
             </div>
             <div class="row">

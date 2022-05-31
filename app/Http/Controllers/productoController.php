@@ -45,11 +45,12 @@ class productoController extends Controller
     {
 
         $reglas=[
-            "nombre" => 'required|alpha',
+            "nombre" => 'required|alpha|unique:productos,nombre',
             "desc" => 'required|min:10|max:50',
             "precio" => 'required|numeric',
             "marca" => 'required',
-            "categoria" => "required"
+            "categoria" => "required",
+            "imagen" => 'required|image'
     
         ];
         //mensajes personalizados por regla 
@@ -58,7 +59,9 @@ class productoController extends Controller
             "min" => "porfavor escribe minimo de 10 palabras",
             "max" => "porfavor escribe maximo de 50 palabras",
             "numeric" => "solo numeros",
-            "alpha" => "solo letras "
+            "alpha" => "solo letras ",
+            "image" => "solo imagenes",
+            "unique" => "nombre ya en uso"
 
         ];
         // crear el objeto validador
@@ -74,6 +77,14 @@ class productoController extends Controller
                 ->withInput();
 
         }else{
+            //analizar el objeto del request asinar la variabre nombre_archivo
+            $nombre_archivo = $r->imagen->getClientOriginalName();
+            $archivo = $r->imagen;
+            //mover el archivo en la carpeta public
+            
+            $ruta = public_path().'/img';
+            $archivo->move($ruta, $nombre_archivo);
+
             //validacion correcta
             $p = new producto;
         //asignar valores a los atributos 
@@ -81,6 +92,7 @@ class productoController extends Controller
         $p->nombre = $r->nombre;
         $p->desc = $r->desc;
         $p->precio = $r->precio;
+        $p->imagen = $nombre_archivo;
         $p->marca_id = $r->marca;
         $p->categoria_id = $r->categoria;
         //grabar la base de datos
@@ -108,7 +120,7 @@ class productoController extends Controller
                 ->with('mensaje' , 'producto creado');
     */
     }
-
+    
     /**
      * Display the specified resource.
      *
