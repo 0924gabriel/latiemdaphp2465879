@@ -12,8 +12,8 @@
         <div class="nav-wrapper">
         <a href="#" class="brand-logo">Logo</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a href="badges.html">productos</a></li>
-            <li><a href="collapsible.html">pedidos</a></li>
+            <li><a href="{{route('productos.index')}}">productos</a></li>
+            <li><a href="{{route('cart.index')}}">pedidos</a></li>
         </ul>
         </div>
     </nav>

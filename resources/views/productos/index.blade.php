@@ -1,6 +1,16 @@
 @extends('layouts.munu')
 
 @section('contenido')
+@if(session('mensajito'))
+   <div class="row">
+    <strong>
+        {{ session('mensajito') }}
+        <a href="{{ route('cart.index') }}">
+            ir al carrito
+        </a>
+    </strong>
+   </div>
+   @endif
     <div class="row">
         <h1>catalogo de productos</h1>
     </div>
